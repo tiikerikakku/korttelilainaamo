@@ -1,6 +1,6 @@
 # korttelilainaamo
 
-Verkkosovellus, jossa käyttäjät voivat ilmoittaa esineitään lainattavaksi omalla postinumeroalueellaan.
+Verkkosovellus, jossa käyttäjät voivat tarjota esineitään lainaan omalla postinumeroalueellaan.
 
 ## toiminnot
 
