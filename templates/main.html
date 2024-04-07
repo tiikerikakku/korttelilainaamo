@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/TYwEQGLiups/download?w=1920');
+    /*padding: 40px;*/
+    min-height: 300px;
+  }
+
+  img {
+    height: 75px;
+    width: 400px;
+    max-width: 100%;
+  }
+
+  .what {
+    text-align: justify;
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>Tervetuloa korttelilainaamoon!</h2>
+  <p>Nyt olisi aika kirjautua.</p>
+  <form action="/in" method="post">
+    <input type="text" name="user" placeholder="Käyttäjä" required>
+    <input type="password" name="secret" placeholder="Salasana" required>
+    <input type="submit" value="Kirjaudu 💥">
+  </form>
+  <img src="https://tiikerikakku.github.io/rojusailio/beautiful_divider.svg" alt="sisällönjakaja">
+  <p class="what">
+    <strong>Mikä korttelilainaamo?</strong> Korttelilainaamossa voit lainata esineitä naapureiltasi.
+    Korttelilainaamon käyttäjät antavat rekisteröityessään oman postinumeronsa, minkä jälkeen omalle
+    alueelle voi tarjota omia esineitä lainaan tai etsiä muiden alueen asukkaiden esineitä.
+    <strong>Porakone hukassa? Lastensynttäreille pitäisi saada nopeasti DVD-elokuva viihdykkeeksi?</strong>
+    Lainaamon käyttäjät voivat keskustella reaaliajassa, ja koska lainattavat esineet löytyvät omalta
+    postinumeroalueelta, saat esineet lainaan ja lainattua jopa 30 sekunnissa.
+    <strong>Ylläpidä mainettasi.</strong> Lainaamon käyttäjät arvioivat lainaamiskokemustaan palvelua
+    käyttäessään. Näet helposti, ketkä pitävät huolta lainattavista esineistä ja keillä laina-aika venyy
+    aina pidemmäksi kuin on sovittu.
+  </p>
+  <p>👇 <mark>Rekisteröidy tästä</mark></p>
+  <form action="/register" method="post">
+    <input type="text" name="user" placeholder="Valitse käyttäjätunnus" required>
+    <input type="password" name="secret" placeholder="Valitse salasana" required>
+    <!--<input type="email" name="email" placeholder="Sähköpostiosoitteesi?" required>-->
+    <textarea name="contacts" rows="5" placeholder="Ilmoita tässä yhteystietosi, jotka muut käyttäjät näkevät. Esimerkiksi puhelinnumero." required></textarea>
+    <input type="number" name="area" placeholder="Postinumerosi? (ei yrityspostinumeroita tai vst.)" min="00100" max="99990" step="10" required>
+    <input type="submit" value="Luo tili ✨">
+  </form>
+</section>
+
+{% endblock %}

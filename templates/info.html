@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/eyA1t7kCgx4/download?w=1920');
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>{% if title %}{{title}}{% else %}Virhe!!{% endif %}</h2>
+  <p>
+    {{clarification|safe}}
+  </p>
+</section>
+
+{% endblock %}
