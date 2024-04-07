@@ -21,3 +21,31 @@ Tavoiteena on, että parin viikon päästä kaikki toiminnot ovat käytettäviss
 * käyttäjän poistaminen?
 
 Muita toimintoja tarpeen ja mahdollisuuksien mukaan...
+
+## systeemin käynnistäminen omalla laitteella
+
+Ensimmäinen askel olisi kloonaaminen gitistä. Tai sitten voit vaan ladata koodin zip-tiedostona githubista. Sitten valmistelua:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+
+pip install flask Flask-SQLAlchemy psycopg2-binary python-dotenv
+```
+
+Seuraavaksi luo tietokanta ja taulut `schema.sql` mukaan. Ja `.env`-tiedosto, minne tulee tarvittavat asetukset, esim. seuraavalla tavalla:
+
+```env
+SECRET=indeedverysecret
+DATABASE=postgresql:///kl
+```
+
+Tässä siis `kl` on tietokannan nimi. Ja tuo `SECRET` ei tosiaan saisi olla arvattavissa (tuotannossa).
+
+Jos kaikki meni oikein, niin koko rojun saa pystyyn seuraavalla komennolla:
+
+```bash
+flask run --debug
+```
+
+Voilà ! Komentokehotteesta löydät nyt sovelluksen verkko-osoitteen. Onnea testailuun!!
