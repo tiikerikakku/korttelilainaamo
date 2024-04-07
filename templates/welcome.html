@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/BFiv6Wx_l_8/download?w=1920');
+  }
+
+  ul {
+    list-style-type: '>> ';
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>Pikavalikko</h2>
+  <form action="/item" method="post">
+    <input type="text" name="name" placeholder="Esineen nimi" required>
+    <textarea name="description" rows="2" placeholder="Esineen kuvaus tänne." required></textarea>
+    <input type="submit" value="Luo esine 📨">
+  </form>
+  <ul>
+    <li>Omat esineesi</li>
+    <li>Asetukset</li>
+  </ul>
+
+  <h2>Omalla alueellasi ({{area}})</h2>
+  <ul>
+    {% for item in items %}
+      <li><a href="/item/{{item[0]}}" target="_blank">{{item[1]}}</a></li>
+    {% else %}
+      <li>Ei yhtään esinettä alueellasi. Harmillista, mutta sinä voit muuttaa tilannetta!</li>
+    {% endfor %}
+  </ul>
+</section>
+
+{% endblock %}

@@ -56,3 +56,15 @@ def register():
       <br><br>&gt;&gt; <a href="/welcome">Tästä lainaamaan</a>
     '''
   )
+
+@app.get('/welcome')
+def welcome():
+  area = db.session.execute(text('select area from users where id=:a'), {
+    'a': session['user']
+  }).fetchone()[0]
+
+  items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a'), {
+    'a': area
+  }).fetchall()
+
+  return render_template('welcome.html', items=items, area=f'{area:05}')
