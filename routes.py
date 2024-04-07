@@ -68,3 +68,29 @@ def welcome():
   }).fetchall()
 
   return render_template('welcome.html', items=items, area=f'{area:05}')
+
+@app.post('/item')
+def createItem():
+  db.session.execute(text('insert into items (name, description, owner) values (:a, :b, :c)'), {
+    'a': request.form['name'],
+    'b': request.form['description'],
+    'c': session['user']
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Hienoa!!!',
+    clarification='''
+      Esineesi on nyt luotu ja alueesi asukkaat voivat nyt pyytää sitä lainaan.
+      <br><br>&gt;&gt; <a href="/welcome">Tästä etusivulle</a>
+    '''
+  )
+
+@app.get('/item/<int:id>')
+def getItem(id):
+  item = db.session.execute(text('select * from items where id=:a'), {
+    'a': id
+  }).fetchone()
+
+  return render_template('item.html', item=item)

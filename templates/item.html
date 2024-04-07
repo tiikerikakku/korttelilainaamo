@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/7fS-nJMJohs/download?w=1920');
+  }
+
+  img {
+    max-height: 50px;
+    filter: hue-rotate(230deg);
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>{{item[1]}}</h2>
+  <p>Kuvaus: {{item[2]}}</p>
+  <img src="https://tiikerikakku.github.io/rojusailio/beautiful_divider.svg" alt="sisällönjakaja">
+  <h3>&gt;&gt; <a href="#">Haluan lainata tämän!</a></h3>
+</section>
+
+{% endblock %}
