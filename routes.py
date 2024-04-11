@@ -3,6 +3,9 @@ from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 
+# todo split this file in pieces
+# todo csrf
+
 @app.get('/')
 def main():
   if 'user' in session and session['user'] != '':
@@ -35,6 +38,7 @@ def signOut():
 @app.post('/register')
 def register():
   # todo check if user exists
+  # todo check field inputs
 
   h = generate_password_hash(request.form['secret'])
   nid = db.session.execute(text('insert into users (nick, area, contacts, secret) values (:a, :b, :c, :d) returning id'), {
@@ -66,6 +70,8 @@ def welcome():
     'a': session['user']
   }).fetchone()[0]
 
+  # todo check removed items (or just actually remove them from the db?)
+
   items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null'), {
     'a': area
   }).fetchall()
@@ -90,6 +96,9 @@ def welcome():
 
 @app.post('/item')
 def createItem():
+  # todo check field inputs
+  # todo accept link input
+
   db.session.execute(text('insert into items (name, description, owner) values (:a, :b, :c)'), {
     'a': request.form['name'],
     'b': request.form['description'],
@@ -108,6 +117,9 @@ def createItem():
 
 @app.get('/item/<int:id>')
 def getItem(id):
+  # todo check input
+  # todo maybe check if item is available
+
   item = db.session.execute(text('select * from items where id=:a'), {
     'a': id
   }).fetchone()
@@ -116,6 +128,9 @@ def getItem(id):
 
 @app.get('/lend/<int:id>')
 def lendItem(id):
+  # todo check input
+  # todo maybe check if item is available
+
   rid = db.session.execute(text('insert into requests (item, creator) values (:a, :b) returning id') , {
     'a': id,
     'b': session['user']
@@ -127,6 +142,10 @@ def lendItem(id):
 
 @app.get('/requests/<int:id>')
 def getRequest(id):
+  # todo check input
+  # todo maybe check if item is available
+  # todo check if user is allowed to see this
+
   req = db.session.execute(text('select item, creator, status from requests where id=:a'), {
     'a': id
   }).fetchone()
@@ -151,6 +170,10 @@ def getRequest(id):
 
 @app.get('/accept/<int:id>')
 def acceptRequest(id):
+  # todo check input
+  # todo check if user is allowed to do this
+  # todo do not allow accepting if item is already given to someone
+
   db.session.execute(text('update requests set status = \'accepted\' where id=:a'), {
     'a': id
   })
@@ -180,6 +203,9 @@ def acceptRequest(id):
 
 @app.get('/decline/<int:id>')
 def declineRequest(id):
+  # todo check input
+  # todo check if user is allowed to do this
+
   db.session.execute(text('update requests set status = \'declined\' where id=:a'), {
     'a': id
   })
@@ -204,6 +230,9 @@ def declineRequest(id):
 
 @app.get('/return/<int:id>')
 def returnItem(id):
+  # todo check input
+  # todo ensure that user is allowed to do this
+
   db.session.execute(text('update items set possessor = null where id=:a'), {
     'a': id
   })
@@ -220,6 +249,9 @@ def returnItem(id):
 
 @app.get('/review/<int:id>')
 def review(id):
+  # todo check input
+  # todo check that task is available and user is correct
+
   review = db.session.execute(text('select users.nick from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
     'a': id
   }).fetchone()
@@ -228,6 +260,8 @@ def review(id):
 
 @app.post('/review')
 def sendReview():
+  # todo check that user is allowed to do this
+
   rating = 0
 
   if request.form['review'] == 'good':
