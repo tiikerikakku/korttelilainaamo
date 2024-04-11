@@ -131,3 +131,56 @@ def getRequest(id):
   }).fetchone()[0]
 
   return render_template('request.html', req=req, item=item, isOwner=isOwner, id=id, contacts=contacts)
+
+@app.get('/accept/<int:id>')
+def acceptRequest(id):
+  db.session.execute(text('update requests set status = \'accepted\' where id=:a'), {
+    'a': id
+  })
+
+  db.session.execute(text('update items set possessor = requests.creator from requests where requests.item = items.id and requests.id=:a'), {
+    'a': id
+  })
+
+  db.session.execute(text('with q as (select requests.creator, items.owner from requests, items where requests.id=:a and requests.item = items.id) insert into reviews (reviewer, reviewed) select * from q'), {
+    'a': id
+  })
+
+  db.session.execute(text('with q as (select requests.creator, items.owner from requests, items where requests.id=:a and requests.item = items.id) insert into reviews (reviewed, reviewer) select * from q'), {
+    'a': id
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Olet hyväksynyt pyynnön.',
+    clarification='''
+      Etusivun kautta löydät vielä tarvittaessa lainaajan yhteystiedot.
+      Kun esine on palautettu sinulle, merkitse se palautetuksi oman etusivusi kautta.
+      <br><br>&gt;&gt; <a href="/welcome">Tästä etusivulle</a>
+    '''
+  )
+
+@app.get('/decline/<int:id>')
+def declineRequest(id):
+  db.session.execute(text('update requests set status = \'declined\' where id=:a'), {
+    'a': id
+  })
+
+  db.session.execute(text('with q as (select requests.creator, items.owner from requests, items where requests.id=:a and requests.item = items.id) insert into reviews (reviewer, reviewed) select * from q'), {
+    'a': id
+  })
+
+  db.session.execute(text('with q as (select requests.creator, items.owner from requests, items where requests.id=:a and requests.item = items.id) insert into reviews (reviewed, reviewer) select * from q'), {
+    'a': id
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Olet hylännyt pyynnön.',
+    clarification='''
+      Voit antaa palautteen pyynnön tekijälle etusivun kautta.
+      <br><br>&gt;&gt; <a href="/welcome">Tästä etusivulle</a>
+    '''
+  )
