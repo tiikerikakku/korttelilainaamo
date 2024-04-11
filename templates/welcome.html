@@ -10,6 +10,10 @@
   ul {
     list-style-type: '>> ';
   }
+
+  strong {
+    color: indigo;
+  }
 </style>
 
 {% endblock %}
@@ -27,6 +31,42 @@
     <li>Omat esineesi</li>
     <li>Asetukset</li>
   </ul>
+
+  {% if req != [] %}
+    <strong>Pyynnöt ({{req|count}})</strong>
+    <ul>
+      {% for sreq in req %}
+        <li><a href="/requests/{{sreq[0]}}" target="_blank">{{sreq[1]}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if reviews != [] %}
+    <strong>Anna palautetta ({{reviews|count}})</strong>
+    <ul>
+      {% for review in reviews %}
+        <li>{{review[2]}} <a href="/review/{{review[0]}}" target="_blank">({{review[1].strftime('%d.%m.%Y')}})</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if given != [] %}
+    <strong>Muille lainaamasi ({{given|count}})</strong>
+    <ul>
+      {% for item in given %}
+        <li><a href="/item/{{item[0]}}" target="_blank">{{item[1]}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  {% if having != [] %}
+    <strong>Sinulla lainassa ({{having|count}})</strong>
+    <ul>
+      {% for item in having %}
+        <li><a href="/item/{{item[0]}}" target="_blank">{{item[1]}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
   <h2>Omalla alueellasi ({{area}})</h2>
   <ul>

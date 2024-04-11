@@ -71,6 +71,20 @@ def welcome():
     'a': session['user']
   }).fetchall()
 
+  reviews = db.session.execute(text('select reviews.id, reviews.given, users.nick from reviews, users where users.id = reviews.reviewed and review is null and reviews.reviewer=:a'), {
+    'a': session['user']
+  }).fetchall()
+
+  given = db.session.execute(text('select * from items where owner=:a and possessor is not null'), {
+    'a': session['user']
+  }).fetchall()
+
+  having = db.session.execute(text('select * from items where possessor=:a'), {
+    'a': session['user']
+  }).fetchall()
+
+  return render_template('welcome.html', items=items, area=f'{area:05}', req=req, reviews=reviews, given=given, having=having)
+
 @app.post('/item')
 def createItem():
   db.session.execute(text('insert into items (name, description, owner) values (:a, :b, :c)'), {
