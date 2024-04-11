@@ -21,3 +21,11 @@ create table requests (
   creator int references users,
   status text default 'pending'
 );
+
+create table reviews (
+  id serial primary key,
+  reviewer int references users,
+  reviewed int references users,
+  review int,
+  given timestamp default now()
+);

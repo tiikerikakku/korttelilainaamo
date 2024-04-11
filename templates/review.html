@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/NyrsRivAW0Q/download?w=1920');
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>Anna palaute</h2>
+  <p>
+    Miten lainaus sujui käyttäjän {{review[0]}} kanssa? Anna arvio.
+  </p>
+  <form action="/review" method="post">
+    <div>
+      <input id="1" type="radio" name="review" value="good" required>
+      <label for="1">Hyvä</label>
+    </div>
+    <div>
+      <input id="2" type="radio" name="review" value="ok" required>
+      <label for="2">Neutraali</label>
+    </div>
+    <div>
+      <input id="3" type="radio" name="review" value="bad" required>
+      <label for="3">Huono</label>
+    </div>
+    <input type="hidden" name="id" value="{{id}}">
+    <input type="submit" value="Lähetä arvio 🥡">
+  </form>
+</section>
+
+{% endblock %}
