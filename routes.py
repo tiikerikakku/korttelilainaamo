@@ -184,3 +184,19 @@ def declineRequest(id):
       <br><br>&gt;&gt; <a href="/welcome">Tästä etusivulle</a>
     '''
   )
+
+@app.get('/return/<int:id>')
+def returnItem(id):
+  db.session.execute(text('update items set possessor = null where id=:a'), {
+    'a': id
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Esine palautettu',
+    clarification='''
+      Muut käyttäjät voivat nyt taas lainata esinettäsi korttelilainaamosta.
+      <br><br>&gt;&gt; <a href="/welcome">Tästä pääset etusivulle</a>
+    '''
+  )
