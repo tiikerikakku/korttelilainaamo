@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block meta %}
+
+<style>
+  header {
+    background-image: url('https://unsplash.com/photos/QUoMZNWcCMI/download?w=1920');
+  }
+
+  .contacts {
+    white-space: pre-line;
+  }
+</style>
+
+{% endblock %}
+
+{% block stuff %}
+
+<section>
+  <h2>Pyyntö</h2>
+  <p>
+    {{item[0]}}
+  </p>
+  <h2>Vastapuolen yhteystiedot</h2>
+  <p class="contacts">{{contacts}}</p>
+  {% if isOwner %}
+  <h3>&gt;&gt; <a href="/accept/{{id}}">Hyväksy pyyntö</a> tai <a href="/decline/{{id}}">Hylkää pyyntö</a></h3>
+  {% endif %}
+</section>
+
+{% endblock %}

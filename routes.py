@@ -67,7 +67,9 @@ def welcome():
     'a': area
   }).fetchall()
 
-  return render_template('welcome.html', items=items, area=f'{area:05}')
+  req = db.session.execute(text('select requests.id, items.name, requests.creator, items.owner from requests, items, users where (requests.creator=:a and items.id = requests.item) or (users.id=:a and users.id = items.owner and items.id = requests.item) group by requests.id, items.id having requests.status = \'pending\''), {
+    'a': session['user']
+  }).fetchall()
 
 @app.post('/item')
 def createItem():
@@ -94,3 +96,38 @@ def getItem(id):
   }).fetchone()
 
   return render_template('item.html', item=item)
+
+@app.get('/lend/<int:id>')
+def lendItem(id):
+  rid = db.session.execute(text('insert into requests (item, creator) values (:a, :b) returning id') , {
+    'a': id,
+    'b': session['user']
+  }).fetchone()[0]
+
+  db.session.commit()
+
+  return redirect(f'/requests/{rid}')
+
+@app.get('/requests/<int:id>')
+def getRequest(id):
+  req = db.session.execute(text('select item, creator, status from requests where id=:a'), {
+    'a': id
+  }).fetchone()
+
+  item = db.session.execute(text('select name, owner from items where id=:a'), {
+    'a': req[0]
+  }).fetchone()
+
+  isOwner = (item[1] == session['user'])
+
+  if isOwner:
+    secondParty = req[1]
+  else:
+    secondParty = item[1]
+
+
+  contacts = db.session.execute(text('select contacts from users where id=:a'), {
+    'a': secondParty
+  }).fetchone()[0]
+
+  return render_template('request.html', req=req, item=item, isOwner=isOwner, id=id, contacts=contacts)
