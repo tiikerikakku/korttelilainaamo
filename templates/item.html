@@ -24,17 +24,17 @@
   <h3>
     &gt;&gt;
     {% if item[4] != session['user'] %}
-    {% if item[5] == None %}
-    <a href="/lend/{{item[0]}}">Haluan lainata tämän!</a>
+      {% if item[5] == None %}
+        <a href="/lend/{{item[0]}}">Haluan lainata tämän!</a>
+      {% else %}
+        Tuote on sinulla lainassa.
+      {% endif %}
     {% else %}
-    Tuote on sinulla lainassa.
-    {% endif %}
-    {% else %}
-    {% if item[5] == None %}
-    <a href="#">Poista tuote</a>
-    {% else %}
-    <a href="/return/{{item[0]}}">Merkitse laina palautetuksi</a>
-    {% endif %}
+      {% if item[5] == None %}
+        <a href="#">Poista tuote</a>
+      {% else %}
+        <a href="/return/{{item[0]}}">Merkitse laina palautetuksi</a>
+      {% endif %}
     {% endif %}
   </h3>
 </section>
