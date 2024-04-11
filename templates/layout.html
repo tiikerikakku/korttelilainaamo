@@ -86,6 +86,7 @@
         <em>
           korttelilainaamo 2024
           {% if 'user' in session and session['user'] != '' %}
+            ({{session['user']}})
             | <a href="/welcome">etusivulle</a>
             | <a href="/out">kirjaudu ulos</a>
           {% endif %}
