@@ -8,16 +8,16 @@ Sovelluksen perusominaisuuksia on lisäilty ja ns. runko on olemassa ja odottaa 
 
 Tavoiteena on, että parin viikon päästä kaikki toiminnot ovat käytettävissä ja (kunnolla) tominnassa. Sitten viilausta...
 
-## toiminnot
+## toiminnot 11.4.2024
 
 * rekisteröityminen (mm. oman postinumeron ilmoittaminen) **TOTEUTETTU**
 * esineen lisääminen **TOTEUTETTU**
 * listaus oman postinumeroalueen vapaana olevista esineistä **TOTEUTETTU**
-* lainauspyyntö & hyväksyntä/hylkäys
-* lainan palauttaminen
-* arvioinnit (lainaaja & lainaava)
-* esineen poistaminen
+* lainauspyyntö & hyväksyntä/hylkäys **TOTEUTETTU**
+* lainan palauttaminen **TOTEUTETTU**
+* arvioinnit (lainaaja & lainaava) **OSIN TOTEUTETTU**, pitää vielä näyttää tieto käyttäjille
 * omien tietojen ja esineiden tietojen muokkaaminen
+* esineen poistaminen?
 * käyttäjän poistaminen?
 
 Muita toimintoja tarpeen ja mahdollisuuksien mukaan...
