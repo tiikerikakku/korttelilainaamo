@@ -59,6 +59,9 @@ def register():
 
 @app.get('/welcome')
 def welcome():
+  if not 'user' in session or session['user'] == '':
+    return redirect('/')
+
   area = db.session.execute(text('select area from users where id=:a'), {
     'a': session['user']
   }).fetchone()[0]
