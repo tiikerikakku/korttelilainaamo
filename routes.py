@@ -63,7 +63,7 @@ def welcome():
     'a': session['user']
   }).fetchone()[0]
 
-  items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a'), {
+  items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null'), {
     'a': area
   }).fetchall()
 
