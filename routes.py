@@ -72,9 +72,17 @@ def welcome():
 
   # todo check removed items (or just actually remove them from the db?)
 
-  items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null'), {
-    'a': area
-  }).fetchall()
+  itemsFromUser = request.args.get('owner', type=int)
+
+  if not itemsFromUser:
+    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null'), {
+      'a': area
+    }).fetchall()
+  else:
+    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.owner=:b'), {
+      'a': area,
+      'b': itemsFromUser
+    }).fetchall()
 
   req = db.session.execute(text('select requests.id, items.name, requests.creator, items.owner from requests, items, users where (requests.creator=:a and items.id = requests.item) or (users.id=:a and users.id = items.owner and items.id = requests.item) group by requests.id, items.id having requests.status = \'pending\''), {
     'a': session['user']
