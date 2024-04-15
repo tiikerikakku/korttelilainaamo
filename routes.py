@@ -292,3 +292,15 @@ def sendReview():
       <br><br>&gt;&gt; <a href="/welcome">Siirry etusivulle</a>
     '''
   )
+
+@app.get('/settings')
+def settings():
+  user = db.session.execute(text('select nick, contacts, area from users where id=:a'), {
+    'a': session['user']
+  }).fetchone()
+
+  companies = db.session.execute(text('select id, name from companies where maintainer=:a'), {
+    'a': session['user']
+  }).fetchall()
+
+  return render_template('settings.html', user=user, companies=companies)

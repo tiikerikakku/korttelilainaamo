@@ -7,15 +7,11 @@
     background-image: url('https://unsplash.com/photos/BFiv6Wx_l_8/download?w=1920');
   }
 
-  ul {
-    list-style-type: '>> ';
-  }
-
   strong {
     color: indigo;
   }
 
-  .menu li a:any-link {
+  ul:not(:last-of-type) li a:any-link {
     color: orangered;
   }
 </style>
@@ -31,7 +27,7 @@
     <textarea name="description" rows="2" placeholder="Esineen kuvaus tänne." required></textarea>
     <input type="submit" value="Luo esine 📨">
   </form>
-  <ul class="menu">
+  <ul>
     <li>
       {% if not request.args.get('owner') %}
         <a href="/welcome?owner={{session['user']}}">Näytä omat esineesi</a>
@@ -39,7 +35,7 @@
         <a href="/welcome">Näytä korttelin kaikki saatavilla olevat esineet</a>
       {% endif %}
     </li>
-    <li><a href="#">Asetukset</a></li>
+    <li><a href="/settings">Asetukset</a></li>
   </ul>
 
   {% if req != [] %}
