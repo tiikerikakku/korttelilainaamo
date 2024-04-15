@@ -29,3 +29,9 @@ create table reviews (
   review int,
   given timestamp default now()
 );
+
+create table companies (
+  id serial primary key,
+  name text,
+  maintainer int references users
+);
