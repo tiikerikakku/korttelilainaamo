@@ -2,13 +2,13 @@
 
 Verkkosovellus, jossa käyttäjät voivat tarjota esineitään lainaan omalla postinumeroalueellaan.
 
-### status 7.4.2024
+### status 21.4.2024
 
-Sovelluksen perusominaisuuksia on lisäilty ja ns. runko on olemassa ja odottaa nyt jatkokehitystä. Kaikkia ominaisuuksia ei ole toteutettu vielä, ja olemassaoleviin ominaisuuksiin pitää tehdä viilauksia, esim. validointia (nyt toteutettu vain selaimen puolella) ja erilaisten mahdollisten virheiden käsittelyä. Alla olevaan listaan on merkitty missä vaiheessa toiminnot ovat.
+Sovelluksen tärkeimmät ominaisuudet toteutettu. Kireän aikataulun vuoksi ihan kaikki alla listatut eivät ole valmiita.
 
-Tavoiteena on, että parin viikon päästä kaikki toiminnot ovat käytettävissä ja (kunnolla) tominnassa. Sitten viilausta...
+Tavoitteena olisi nyt loppukiri, jossa saadaan nämä kuntoon + taustalle toimimaan csrf ja muut validaatiot. Ja selkeämpää jaottelua koodiin...
 
-## toiminnot 11.4.2024
+## toiminnot 21.4.2024
 
 * rekisteröityminen (mm. oman postinumeron ilmoittaminen) **TOTEUTETTU**
 * esineen lisääminen **TOTEUTETTU**
@@ -16,11 +16,13 @@ Tavoiteena on, että parin viikon päästä kaikki toiminnot ovat käytettäviss
 * lainauspyyntö & hyväksyntä/hylkäys **TOTEUTETTU**
 * lainan palauttaminen **TOTEUTETTU**
 * arvioinnit (lainaaja & lainaava) **OSIN TOTEUTETTU**, pitää vielä näyttää tieto käyttäjille
-* omien tietojen ja esineiden tietojen muokkaaminen
-* esineen poistaminen?
-* käyttäjän poistaminen?
+* omien tietojen ja esineiden tietojen muokkaaminen **OSIN TOTEUTETTU**
+* UUSI OMINAISUUS: yrityskorttelin luominen (lisää tietoa käyttäjän asetussivulla) **OSIN TOTEUTETTU**
 
 Muita toimintoja tarpeen ja mahdollisuuksien mukaan...
+
+* esineen poistaminen?
+* käyttäjän poistaminen?
 
 ## systeemin käynnistäminen omalla laitteella
 
