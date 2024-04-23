@@ -107,10 +107,11 @@ def createItem():
   # todo check field inputs
   # todo accept link input
 
-  db.session.execute(text('insert into items (name, description, owner) values (:a, :b, :c)'), {
+  db.session.execute(text('insert into items (name, description, owner, link) values (:a, :b, :c, :d)'), {
     'a': request.form['name'],
     'b': request.form['description'],
-    'c': session['user']
+    'c': session['user'],
+    'd': request.form['link']
   })
 
   db.session.commit()
