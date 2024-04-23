@@ -132,7 +132,11 @@ def getItem(id):
     'a': id
   }).fetchone()
 
-  return render_template('item.html', item=item)
+  rating = db.session.execute(text('select coalesce(sum(review), 0) from reviews where reviewed=:a'), {
+    'a': item[4]
+  }).fetchone()[0]
+
+  return render_template('item.html', item=item, rating=rating)
 
 @app.get('/lend/<int:id>')
 def lendItem(id):
