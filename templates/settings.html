@@ -22,7 +22,7 @@
   <form action="/profile" method="post">
     <input type="text" name="user" placeholder="Valitse käyttäjätunnus" required value="{{user[0]}}">
     <textarea name="contacts" rows="5" placeholder="Ilmoita tässä yhteystietosi, jotka muut käyttäjät näkevät. Esimerkiksi puhelinnumero." required>{{user[1]}}</textarea>
-    <input type="number" name="area" placeholder="Postinumerosi? (ei yrityspostinumeroita tai vst.)" min="00100" max="99990" step="10" required value="{{'%05d'|format(user[2])}}">
+    <input type="text" name="area" inputmode="numeric" pattern="\d{4}[059]" placeholder="Postinumerosi? (ei yrityspostinumeroita tai vst.)" required value="{{'%05d'|format(user[2])}}">
     <input type="submit" value="Päivitä 🕸️">
   </form>
 
