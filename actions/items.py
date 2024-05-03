@@ -79,3 +79,26 @@ def returnItem(id):
       <br><br>&gt;&gt; <a href="/welcome">Tästä pääset etusivulle</a>
     '''
   )
+
+@app.post('/details')
+@auth
+@csrfPost
+def updateItem():
+  # todo ensure that user is allowed to do this
+
+  db.session.execute(text('update items set name=:a, description=:b, link=:c where id=:d'), {
+    'a': request.form['name'],
+    'b': request.form['description'],
+    'c': request.form['link'],
+    'd': request.form['id']
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Ok!',
+    clarification='''
+      Esineen päivitys onnistui.
+      <br><br>&gt;&gt; <a href="/welcome">Täältä pääset takaisin etusivulle</a>
+    '''
+  )
