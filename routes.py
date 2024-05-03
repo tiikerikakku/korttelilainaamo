@@ -1,4 +1,5 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
@@ -11,10 +12,8 @@ def main():
   return render_template('main.html')
 
 @app.get('/welcome')
+@auth
 def welcome():
-  if not 'user' in session or session['user'] == '':
-    return redirect('/')
-
   area = db.session.execute(text('select area from users where id=:a'), {
     'a': session['user']
   }).fetchone()[0]

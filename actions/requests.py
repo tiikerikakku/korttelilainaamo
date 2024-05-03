@@ -1,8 +1,10 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
 @app.get('/requests/<int:id>')
+@auth
 def getRequest(id):
   # todo check input
   # todo maybe check if item is available
@@ -31,6 +33,7 @@ def getRequest(id):
   return render_template('request.html', req=req, item=item, isOwner=isOwner, id=id, contacts=contacts)
 
 @app.get('/accept/<int:id>')
+@auth
 def acceptRequest(id):
   # todo check input
   # todo check if user is allowed to do this
@@ -64,6 +67,7 @@ def acceptRequest(id):
   )
 
 @app.get('/decline/<int:id>')
+@auth
 def declineRequest(id):
   # todo check input
   # todo check if user is allowed to do this

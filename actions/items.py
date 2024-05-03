@@ -1,8 +1,10 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
 @app.post('/item')
+@auth
 def createItem():
   # todo check field inputs
   # todo accept link input
@@ -25,6 +27,7 @@ def createItem():
   )
 
 @app.get('/item/<int:id>')
+@auth
 def getItem(id):
   # todo check input
   # todo maybe check if item is available
@@ -40,6 +43,7 @@ def getItem(id):
   return render_template('item.html', item=item, rating=rating)
 
 @app.get('/lend/<int:id>')
+@auth
 def lendItem(id):
   # todo check input
   # todo maybe check if item is available
@@ -54,6 +58,7 @@ def lendItem(id):
   return redirect(f'/requests/{rid}')
 
 @app.get('/return/<int:id>')
+@auth
 def returnItem(id):
   # todo check input
   # todo ensure that user is allowed to do this

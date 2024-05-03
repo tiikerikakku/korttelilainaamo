@@ -1,4 +1,5 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
@@ -18,6 +19,7 @@ def signIn():
   )
 
 @app.get('/out')
+@auth
 def signOut():
   session['user'] = ''
 

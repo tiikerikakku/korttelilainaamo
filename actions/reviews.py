@@ -1,8 +1,10 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
 @app.get('/review/<int:id>')
+@auth
 def review(id):
   # todo check input
   # todo check that task is available and user is correct
@@ -14,6 +16,7 @@ def review(id):
   return render_template('review.html', review=review, id=id)
 
 @app.post('/review')
+@auth
 def sendReview():
   # todo check that user is allowed to do this
 

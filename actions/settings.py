@@ -1,9 +1,11 @@
 from app import app, db
+from checks import auth
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 
 @app.get('/settings')
+@auth
 def settings():
   user = db.session.execute(text('select nick, contacts, area from users where id=:a'), {
     'a': session['user']
@@ -16,6 +18,7 @@ def settings():
   return render_template('settings.html', user=user, companies=companies)
 
 @app.post('/profile')
+@auth
 def updateProfile():
   db.session.execute(text('update users set nick=:a, contacts=:b, area=:c where id=:d'), {
     'a': request.form['user'],
@@ -35,6 +38,7 @@ def updateProfile():
   )
 
 @app.post('/password')
+@auth
 def updatePassword():
   current = db.session.execute(text('select secret from users where id=:a'), {
     'a': session['user']
