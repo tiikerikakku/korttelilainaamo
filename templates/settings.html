@@ -23,6 +23,7 @@
     <input type="text" name="user" placeholder="Valitse käyttäjätunnus" required value="{{user[0]}}">
     <textarea name="contacts" rows="5" placeholder="Ilmoita tässä yhteystietosi, jotka muut käyttäjät näkevät. Esimerkiksi puhelinnumero." required>{{user[1]}}</textarea>
     <input type="text" name="area" inputmode="numeric" pattern="\d{4}[059]" placeholder="Postinumerosi? (ei yrityspostinumeroita tai vst.)" required value="{{'%05d'|format(user[2])}}">
+    <input type="hidden" name="csrf" value="{{session['csrf']}}">
     <input type="submit" value="Päivitä 🕸️">
   </form>
 
@@ -31,6 +32,7 @@
   <form action="/password" method="post">
     <input type="password" name="secret" placeholder="Mikä on nykyinen salasanasi?" required>
     <input type="password" name="theNewSecret" placeholder="Valitse uusi salasana" required>
+    <input type="hidden" name="csrf" value="{{session['csrf']}}">
     <input type="submit" value="Vaihda salasana 🔐">
   </form>
 
@@ -45,6 +47,7 @@
 
   <form action="/business" method="post">
     <input type="text" name="name" placeholder="Valitse yrityskorttelille nimi" required>
+    <input type="hidden" name="csrf" value="{{session['csrf']}}">
     <input type="submit" value="Luo yrityskortteli 🏬">
   </form>
 

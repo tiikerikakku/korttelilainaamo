@@ -1,10 +1,11 @@
 from app import app, db
-from checks import auth
+from checks import auth, csrfPost
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
 @app.post('/business')
 @auth
+@csrfPost
 def createBusiness():
   db.session.execute(text('insert into companies (name, maintainer) values (:a, :b)'), {
     'a': request.form['name'],

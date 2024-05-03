@@ -1,5 +1,5 @@
 from app import app, db
-from checks import auth
+from checks import auth, csrfPost
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
@@ -17,6 +17,7 @@ def review(id):
 
 @app.post('/review')
 @auth
+@csrfPost
 def sendReview():
   # todo check that user is allowed to do this
 

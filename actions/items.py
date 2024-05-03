@@ -1,10 +1,11 @@
 from app import app, db
-from checks import auth
+from checks import auth, csrfPost
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
 @app.post('/item')
 @auth
+@csrfPost
 def createItem():
   # todo check field inputs
   # todo accept link input

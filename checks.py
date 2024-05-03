@@ -8,3 +8,13 @@ def auth(f):
       return redirect('/')
     return f(*a, **b)
   return isSignedIn
+
+def csrfPost(f):
+  @wraps(f)
+  def hasValidCsrf(*a, **b):
+    if not 'csrf' in request.form or request.form['csrf'] != session['csrf']:
+      return render_template('info.html',
+        clarification='Kirjaudu ulos ja sisään uudelleen. Yritä sitten uudestaan.'
+      )
+    return f(*a, **b)
+  return hasValidCsrf

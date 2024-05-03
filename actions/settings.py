@@ -1,5 +1,5 @@
 from app import app, db
-from checks import auth
+from checks import auth, csrfPost
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
@@ -19,6 +19,7 @@ def settings():
 
 @app.post('/profile')
 @auth
+@csrfPost
 def updateProfile():
   db.session.execute(text('update users set nick=:a, contacts=:b, area=:c where id=:d'), {
     'a': request.form['user'],
@@ -39,6 +40,7 @@ def updateProfile():
 
 @app.post('/password')
 @auth
+@csrfPost
 def updatePassword():
   current = db.session.execute(text('select secret from users where id=:a'), {
     'a': session['user']
