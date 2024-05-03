@@ -29,7 +29,7 @@
     &gt;&gt;
     {% if item[4] != session['user'] %}
       {% if item[5] == None %}
-        <a href="/lend/{{item[0]}}">Haluan lainata tämän!</a>
+        <a href="/lend/{{item[0]}}?csrf={{session['csrf']}}">Haluan lainata tämän!</a>
       {% else %}
         Tuote on sinulla lainassa.
       {% endif %}
@@ -37,7 +37,7 @@
       {% if item[5] == None %}
         <a href="#">Poista tuote</a>
       {% else %}
-        <a href="/return/{{item[0]}}">Merkitse laina palautetuksi</a>
+        <a href="/return/{{item[0]}}?csrf={{session['csrf']}}">Merkitse laina palautetuksi</a>
       {% endif %}
     {% endif %}
   </h3>

@@ -92,7 +92,7 @@
           {% if 'user' in session and session['user'] != '' %}
             ({{session['user']}})
             | <a href="/welcome">etusivulle</a>
-            | <a href="/out">kirjaudu ulos</a>
+            | <a href="/out?csrf={{session['csrf']}}">kirjaudu ulos</a>
           {% endif %}
         </em>
       </footer>

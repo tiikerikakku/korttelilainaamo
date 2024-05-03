@@ -1,5 +1,5 @@
 from app import app, db
-from checks import auth, csrfPost
+from checks import auth, csrfPost, csrfGet
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
@@ -45,6 +45,7 @@ def getItem(id):
 
 @app.get('/lend/<int:id>')
 @auth
+@csrfGet
 def lendItem(id):
   # todo check input
   # todo maybe check if item is available
@@ -60,6 +61,7 @@ def lendItem(id):
 
 @app.get('/return/<int:id>')
 @auth
+@csrfGet
 def returnItem(id):
   # todo check input
   # todo ensure that user is allowed to do this

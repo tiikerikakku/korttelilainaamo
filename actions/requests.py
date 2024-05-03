@@ -1,5 +1,5 @@
 from app import app, db
-from checks import auth
+from checks import auth, csrfGet
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
@@ -34,6 +34,7 @@ def getRequest(id):
 
 @app.get('/accept/<int:id>')
 @auth
+@csrfGet
 def acceptRequest(id):
   # todo check input
   # todo check if user is allowed to do this
@@ -68,6 +69,7 @@ def acceptRequest(id):
 
 @app.get('/decline/<int:id>')
 @auth
+@csrfGet
 def declineRequest(id):
   # todo check input
   # todo check if user is allowed to do this

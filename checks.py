@@ -18,3 +18,15 @@ def csrfPost(f):
       )
     return f(*a, **b)
   return hasValidCsrf
+
+def csrfGet(f):
+  @wraps(f)
+  def hasValidCsrf(*a, **b):
+    token = request.args.get('csrf')
+
+    if not token or token != session['csrf']:
+      return render_template('info.html',
+        clarification='Kirjaudu ulos ja sisään uudelleen. Yritä sitten uudestaan.'
+      )
+    return f(*a, **b)
+  return hasValidCsrf
