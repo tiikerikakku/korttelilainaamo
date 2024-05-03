@@ -3,6 +3,7 @@ from checks import auth
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
+from secrets import token_hex
 
 @app.post('/in')
 def signIn():
@@ -12,6 +13,8 @@ def signIn():
 
   if q and check_password_hash(q[1], request.form['secret']):
     session['user'] = q[0]
+    session['csrf'] = token_hex(24)
+
     return redirect('/welcome')
 
   return render_template('info.html', 
@@ -22,6 +25,7 @@ def signIn():
 @auth
 def signOut():
   session['user'] = ''
+  session['csrf'] = ''
 
   return render_template('info.html',
     title='Olet kirjautunut ulos',
@@ -42,6 +46,7 @@ def register():
   }).fetchone()[0]
 
   session['user'] = nid
+  session['csrf'] = token_hex(24)
 
   db.session.commit()
 
