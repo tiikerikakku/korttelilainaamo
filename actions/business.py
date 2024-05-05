@@ -8,42 +8,42 @@ from sqlalchemy.exc import IntegrityError
 @auth
 @csrfPost
 def createBusiness():
-  try:
-    db.session.execute(text('insert into companies (name, maintainer) values (:a, :b)'), {
-      'a': request.form['name'],
-      'b': session['user']
-    })
-  except IntegrityError:
+    try:
+        db.session.execute(text('insert into companies (name, maintainer) values (:a, :b)'), {
+          'a': request.form['name'],
+          'b': session['user']
+        })
+    except IntegrityError:
+        return render_template('info.html',
+          clarification='Yrityskorrtelin luonti epäonnistui. Palaa takaisin ja kokeile eri nimellä.'
+        )
+
+    db.session.commit()
+
     return render_template('info.html',
-      clarification='Yrityskorrtelin luonti epäonnistui. Palaa takaisin ja kokeile eri nimellä.'
-    )
-
-  db.session.commit()
-
-  return render_template('info.html',
-    title='Kuin yritysjohtaja.',
-    clarification='''
+      title='Kuin yritysjohtaja.',
+      clarification='''
       Sinä siis. Yrityskorttelisi on luotu!
       <br><br>&gt;&gt; <a href="/welcome">Täältä pääset takaisin etusivulle</a>
     '''
-  )
+    )
 
 @app.get('/blowupbusiness/<int:id>')
 @auth
 @csrfGet
 def removeBusiness(id):
-  db.session.execute(text('delete from companies where id=:a and maintainer=:b'), {
-    'a': id,
-    'b': session['user']
-  })
+    db.session.execute(text('delete from companies where id=:a and maintainer=:b'), {
+      'a': id,
+      'b': session['user']
+    })
 
-  db.session.commit()
+    db.session.commit()
 
-  return render_template('info.html',
-    title='Yritys veks.',
-    clarification='''
+    return render_template('info.html',
+      title='Yritys veks.',
+      clarification='''
       Yrityskortteli on nyt poistettu. Korttelin jäsenet voivat vaihtaa postinumeroaan
       omista asetuksistaan.
       <br><br>&gt;&gt; <a href="/welcome">Täältä pääset takaisin etusivulle</a>
     '''
-  )
+    )
