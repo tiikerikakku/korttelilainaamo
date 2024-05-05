@@ -1,3 +1,5 @@
+drop table if exists users, items, requests, reviews, companies;
+
 create table users (
   id serial primary key,
   nick text unique check(coalesce(nick, '') != ''),
