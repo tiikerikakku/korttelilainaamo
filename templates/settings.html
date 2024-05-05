@@ -53,7 +53,7 @@
 
   <ul>
     {% for business in companies %}
-      <li><mark><strong>{{'%04d'|format(business[0])}}9</strong></mark> {{business[1]}} <a href="#">poista</a></li>
+      <li><mark><strong>{{'%04d'|format(business[0])}}9</strong></mark> {{business[1]}} <a href="/blowupbusiness/{{business[0]}}?csrf={{session['csrf']}}">poista</a></li>
     {% else %}
       <li>Ei luotuja yrityskortteleita.</li>
     {% endfor %}
