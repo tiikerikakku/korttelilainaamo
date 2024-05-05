@@ -1,9 +1,9 @@
-from app import app, db
-from checks import auth, csrfPost
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
+from app import app, db
+from checks import auth, csrf_post
 
 @app.get('/settings')
 @auth
@@ -20,8 +20,8 @@ def settings():
 
 @app.post('/profile')
 @auth
-@csrfPost
-def updateProfile():
+@csrf_post
+def update_profile():
     try:
         db.session.execute(text('update users set nick=:a, contacts=:b, area=:c where id=:d'), {
           'a': request.form['user'],
@@ -46,8 +46,8 @@ def updateProfile():
 
 @app.post('/password')
 @auth
-@csrfPost
-def updatePassword():
+@csrf_post
+def update_password():
     current = db.session.execute(text('select secret from users where id=:a'), {
       'a': session['user']
     }).fetchone()[0]

@@ -1,13 +1,13 @@
-from app import app, db
-from checks import auth, csrfPost, csrfGet
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
+from app import app, db
+from checks import auth, csrf_post, csrf_get
 
 @app.post('/item')
 @auth
-@csrfPost
-def createItem():
+@csrf_post
+def create_item():
     try:
         db.session.execute(text('insert into items (name, description, owner, link) values (:a, :b, :c, :d)'), {
           'a': request.form['name'],
@@ -32,7 +32,7 @@ def createItem():
 
 @app.get('/item/<int:id>')
 @auth
-def getItem(id):
+def get_item(id):
     item = db.session.execute(text('select * from items where id=:a'), {
       'a': id
     }).fetchone()
@@ -45,8 +45,8 @@ def getItem(id):
 
 @app.get('/lend/<int:id>')
 @auth
-@csrfGet
-def lendItem(id):
+@csrf_get
+def lend_item(id):
     rid = db.session.execute(text('insert into requests (item, creator) values (:a, :b) returning id') , {
       'a': id,
       'b': session['user']
@@ -58,8 +58,8 @@ def lendItem(id):
 
 @app.get('/return/<int:id>')
 @auth
-@csrfGet
-def returnItem(id):
+@csrf_get
+def return_item(id):
     db.session.execute(text('update items set possessor = null where id=:a and owner=:b'), {
       'a': id,
       'b': session['user']
@@ -77,8 +77,8 @@ def returnItem(id):
 
 @app.get('/remove/<int:id>')
 @auth
-@csrfGet
-def removeItem(id):
+@csrf_get
+def remove_item(id):
     db.session.execute(text('update items set removed = true where id=:a and owner=:b'), {
       'a': id,
       'b': session['user']
@@ -96,8 +96,8 @@ def removeItem(id):
 
 @app.post('/details')
 @auth
-@csrfPost
-def updateItem():
+@csrf_post
+def update_item():
     try:
         db.session.execute(text('update items set name=:a, description=:b, link=:c where id=:d and owner=:e'), {
           'a': request.form['name'],

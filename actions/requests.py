@@ -1,11 +1,11 @@
-from app import app, db
-from checks import auth, csrfGet
-from flask import render_template, request, session, redirect
+from flask import render_template, session
 from sqlalchemy.sql import text
+from app import app, db
+from checks import auth, csrf_get
 
 @app.get('/requests/<int:id>')
 @auth
-def getRequest(id):
+def get_request(id):
     req = db.session.execute(text('select item, creator, status from requests where id=:a'), {
       'a': id
     }).fetchone()
@@ -17,24 +17,24 @@ def getRequest(id):
     if (req[1] != session['user'] and item[1] != session['user']) or req[2] != 'pending':
         return render_template('info.html', clarification='EI OIKEUTTA TÄNNE!!!!')
 
-    isOwner = (item[1] == session['user'])
+    is_owner = (item[1] == session['user'])
 
-    if isOwner:
-        secondParty = req[1]
+    if is_owner:
+        second_party = req[1]
     else:
-        secondParty = item[1]
+        second_party = item[1]
 
 
     contacts = db.session.execute(text('select contacts from users where id=:a'), {
-      'a': secondParty
+      'a': second_party
     }).fetchone()[0]
 
-    return render_template('request.html', req=req, item=item, isOwner=isOwner, id=id, contacts=contacts)
+    return render_template('request.html', req=req, item=item, isOwner=is_owner, id=id, contacts=contacts)
 
 @app.get('/accept/<int:id>')
 @auth
-@csrfGet
-def acceptRequest(id):
+@csrf_get
+def accept_request(id):
     req = db.session.execute(text('select items.owner, requests.status, items.possessor from items, requests where items.id = requests.item and requests.id=:a'), {
       'a': id
     }).fetchone()
@@ -73,8 +73,8 @@ def acceptRequest(id):
 
 @app.get('/decline/<int:id>')
 @auth
-@csrfGet
-def declineRequest(id):
+@csrf_get
+def decline_request(id):
     req = db.session.execute(text('select items.owner, requests.status from items, requests where items.id = requests.item and requests.id=:a'), {
       'a': id
     }).fetchone()

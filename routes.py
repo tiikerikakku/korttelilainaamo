@@ -1,7 +1,7 @@
-from app import app, db
-from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
+from app import app, db
+from checks import auth
 
 @app.get('/')
 def main():
@@ -22,16 +22,16 @@ def welcome():
         business = 'Tuntematon yrityskortteli'
         bid = int(str(area)[:-1])
 
-        businessInfo = db.session.execute(text('select name from companies where id=:a'), {
+        business_info = db.session.execute(text('select name from companies where id=:a'), {
           'a': bid
         }).fetchone()
 
-        if businessInfo:
-            business = businessInfo[0]
+        if business_info:
+            business = business_info[0]
 
-    itemsFromUser = request.args.get('owner', type=int)
+    items_from_user = request.args.get('owner', type=int)
 
-    if not itemsFromUser:
+    if not items_from_user:
         items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null and items.owner!=:b and items.removed is false'), {
           'a': area,
           'b': session['user']
@@ -39,7 +39,7 @@ def welcome():
     else:
         items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.owner=:b and items.removed is false'), {
           'a': area,
-          'b': itemsFromUser
+          'b': items_from_user
         }).fetchall()
 
     req = db.session.execute(text('select requests.id, items.name, requests.creator, items.owner from requests, items, users where (requests.creator=:a and items.id = requests.item) or (users.id=:a and users.id = items.owner and items.id = requests.item) group by requests.id, items.id having requests.status = \'pending\''), {

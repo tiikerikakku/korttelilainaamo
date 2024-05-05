@@ -1,13 +1,13 @@
-from app import app, db
-from checks import auth, csrfGet
+from secrets import token_hex
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
-from secrets import token_hex
+from app import app, db
+from checks import auth, csrf_get
 
 @app.post('/in')
-def signIn():
+def sign_in():
     q = db.session.execute(text('select id, secret from users where nick=:a'), {
       'a': request.form['user']
     }).fetchone()
@@ -18,14 +18,14 @@ def signIn():
 
         return redirect('/welcome')
 
-    return render_template('info.html', 
+    return render_template('info.html',
       clarification='Käyttäjä tai salasana väärin. Palaa edelliselle sivulle ja yritä uudestaan.'
     )
 
 @app.get('/out')
 @auth
-@csrfGet
-def signOut():
+@csrf_get
+def sign_out():
     session['user'] = ''
     session['csrf'] = ''
 
@@ -37,7 +37,7 @@ def signOut():
 @app.post('/register')
 def register():
     if request.form['secret'] == '':
-        return render_template('info.html', 
+        return render_template('info.html',
           clarification='Tiliä ei voitu luoda. Salasana liian lyhyt.'
         )
 
@@ -51,7 +51,7 @@ def register():
           'd': h
         }).fetchone()[0]
     except IntegrityError:
-        return render_template('info.html', 
+        return render_template('info.html',
           clarification='Tiliä ei voitu luoda. Täytä kaikki kentät ja kokeile eri käyttäjänimeä.'
         )
 

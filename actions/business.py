@@ -1,13 +1,13 @@
-from app import app, db
-from checks import auth, csrfPost, csrfGet
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
+from app import app, db
+from checks import auth, csrf_post, csrf_get
 
 @app.post('/business')
 @auth
-@csrfPost
-def createBusiness():
+@csrf_post
+def create_business():
     try:
         db.session.execute(text('insert into companies (name, maintainer) values (:a, :b)'), {
           'a': request.form['name'],
@@ -30,8 +30,8 @@ def createBusiness():
 
 @app.get('/blowupbusiness/<int:id>')
 @auth
-@csrfGet
-def removeBusiness(id):
+@csrf_get
+def remove_business(id):
     db.session.execute(text('delete from companies where id=:a and maintainer=:b'), {
       'a': id,
       'b': session['user']

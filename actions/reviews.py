@@ -1,11 +1,11 @@
-from app import app, db
-from checks import auth, csrfPost
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session
 from sqlalchemy.sql import text
+from app import app, db
+from checks import auth, csrf_post
 
 @app.get('/review/<int:id>')
 @auth
-def review(id):
+def get_review(id):
     review = db.session.execute(text('select users.nick, reviews.reviewer, reviews.review from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
       'a': id
     }).fetchone()
@@ -19,8 +19,8 @@ def review(id):
 
 @app.post('/review')
 @auth
-@csrfPost
-def sendReview():
+@csrf_post
+def send_review():
     rating = 0
 
     if request.form['review'] == 'good':
