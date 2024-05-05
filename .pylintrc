@@ -1,0 +1,10 @@
+[MESSAGES CONTROL]
+
+disable=import-error,
+        wrong-import-position,
+        cyclic-import,
+        missing-module-docstring,
+        missing-function-docstring,
+        line-too-long,
+        redefined-builtin,
+        singleton-comparison
