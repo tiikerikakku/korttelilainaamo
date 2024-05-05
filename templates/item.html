@@ -48,18 +48,18 @@
         {% if item[5] == None %}
           <a href="/lend/{{item[0]}}?csrf={{session['csrf']}}">Haluan lainata tämän!</a>
         {% else %}
-          Tuote on sinulla lainassa.
+          Esine on sinulla lainassa.
         {% endif %}
       {% else %}
         {% if item[5] == None %}
-          <a href="/remove/{{item[0]}}?csrf={{session['csrf']}}">Poista tuote</a>
+          <a href="/remove/{{item[0]}}?csrf={{session['csrf']}}">Poista esine</a>
         {% else %}
           <a href="/return/{{item[0]}}?csrf={{session['csrf']}}">Merkitse laina palautetuksi</a>
         {% endif %}
       {% endif %}
     </h3>
   {% else %}
-    <h2>Tuote on poistettu.</h2>
+    <h2>Esine on poistettu.</h2>
     &gt;&gt; <a href="/welcome">Tästä kotiin</a>
   {% endif %}
 </section>
