@@ -3,6 +3,7 @@ from checks import auth, csrfPost
 from flask import render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
+from sqlalchemy.exc import IntegrityError
 
 @app.get('/settings')
 @auth
@@ -21,12 +22,17 @@ def settings():
 @auth
 @csrfPost
 def updateProfile():
-  db.session.execute(text('update users set nick=:a, contacts=:b, area=:c where id=:d'), {
-    'a': request.form['user'],
-    'b': request.form['contacts'],
-    'c': request.form['area'],
-    'd': session['user']
-  })
+  try:
+    db.session.execute(text('update users set nick=:a, contacts=:b, area=:c where id=:d'), {
+      'a': request.form['user'],
+      'b': request.form['contacts'],
+      'c': request.form['area'],
+      'd': session['user']
+    })
+  except IntegrityError:
+    return render_template('info.html',
+      clarification='Käyttäjän tietoja ei tallennettu, koska arvot eivät täytä niille asetettuja ehtoja.'
+    )
 
   db.session.commit()
 
@@ -45,6 +51,9 @@ def updatePassword():
   current = db.session.execute(text('select secret from users where id=:a'), {
     'a': session['user']
   }).fetchone()[0]
+
+  if request.form['theNewSecret'] == '':
+    return render_template('info.html', clarification='Uusi salasana ei voi olla tyhjä. Palaa takaisin.')
 
   if not check_password_hash(current, request.form['secret']):
     return render_template('info.html', clarification='Nyt ei onnistunut. Palaa takaisin ja yritä uudestaan.')

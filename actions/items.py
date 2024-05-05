@@ -2,6 +2,7 @@ from app import app, db
 from checks import auth, csrfPost, csrfGet
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
+from sqlalchemy.exc import IntegrityError
 
 @app.post('/item')
 @auth
@@ -10,12 +11,17 @@ def createItem():
   # todo check field inputs
   # todo accept link input
 
-  db.session.execute(text('insert into items (name, description, owner, link) values (:a, :b, :c, :d)'), {
-    'a': request.form['name'],
-    'b': request.form['description'],
-    'c': session['user'],
-    'd': request.form['link']
-  })
+  try:
+    db.session.execute(text('insert into items (name, description, owner, link) values (:a, :b, :c, :d)'), {
+      'a': request.form['name'],
+      'b': request.form['description'],
+      'c': session['user'],
+      'd': request.form['link']
+    })
+  except IntegrityError:
+    return render_template('info.html',
+      clarification='Esinettä ei luotu, koska annetut arvot eivät täytä ehtoja.'
+    )
 
   db.session.commit()
 
@@ -86,12 +92,17 @@ def returnItem(id):
 def updateItem():
   # todo ensure that user is allowed to do this
 
-  db.session.execute(text('update items set name=:a, description=:b, link=:c where id=:d'), {
-    'a': request.form['name'],
-    'b': request.form['description'],
-    'c': request.form['link'],
-    'd': request.form['id']
-  })
+  try:
+    db.session.execute(text('update items set name=:a, description=:b, link=:c where id=:d'), {
+      'a': request.form['name'],
+      'b': request.form['description'],
+      'c': request.form['link'],
+      'd': request.form['id']
+    })
+  except IntegrityError:
+    return render_template('info.html',
+      clarification='Esinettä ei päivitetty, koska arvot eivät täytä ehtoja.'
+    )
 
   db.session.commit()
 
