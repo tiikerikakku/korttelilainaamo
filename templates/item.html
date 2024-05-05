@@ -48,7 +48,7 @@
         {% if item[5] == None %}
           <a href="/lend/{{item[0]}}?csrf={{session['csrf']}}">Haluan lainata tämän!</a>
         {% else %}
-          Esine on sinulla lainassa.
+          Esine on lainassa.
         {% endif %}
       {% else %}
         {% if item[5] == None %}
