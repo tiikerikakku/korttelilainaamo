@@ -26,7 +26,7 @@
     {% if item[4] != session['user'] %}
       <h2>{{item[1]}}</h2>
       <p>Kuvaus: {{item[2]}}</p>
-      {% if item[3] %}
+      {% if item[3] and item[3].startswith('https://') %}
         <p>Lisää tietoa: <a href="{{item[3]}}" target="_blank">{{item[3]}}</a></p>
       {% endif %}
       <p>Lainaajan maine: {{rating}}</p>
