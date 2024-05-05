@@ -6,16 +6,13 @@ from sqlalchemy.sql import text
 @app.get('/review/<int:id>')
 @auth
 def review(id):
-  # todo check input
-  # todo check that task is available and user is correct
-
-  review = db.session.execute(text('select users.nick, reviews.reviewer from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
+  review = db.session.execute(text('select users.nick, reviews.reviewer, reviews.review from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
     'a': id
   }).fetchone()
 
-  if review[1] != session['user']:
+  if review[1] != session['user'] or review[2] != None:
     return render_template('info.html',
-      clarification='Et voi antaa arvioita muiden puolesta...'
+      clarification='Et voi antaa arvioita muiden puolesta... Et voi myöskään antaa arviota samasta tapahtumasta useasti.'
     )
 
   return render_template('review.html', review=review, id=id)
@@ -24,8 +21,6 @@ def review(id):
 @auth
 @csrfPost
 def sendReview():
-  # todo check that user is allowed to do this
-
   rating = 0
 
   if request.form['review'] == 'good':
@@ -34,7 +29,7 @@ def sendReview():
   if request.form['review'] == 'bad':
     rating = -1
 
-  db.session.execute(text('update reviews set review=:a, given = now() where id=:b and reviewer=:c'), {
+  db.session.execute(text('update reviews set review=:a, given = now() where id=:b and reviewer=:c and review is null'), {
     'a': rating,
     'b': request.form['id'],
     'c': session['user']
