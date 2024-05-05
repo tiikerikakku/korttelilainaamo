@@ -86,6 +86,26 @@ def returnItem(id):
     '''
   )
 
+@app.get('/remove/<int:id>')
+@auth
+@csrfGet
+def removeItem(id):
+  # todo ensure allowed
+
+  db.session.execute(text('update items set removed = true where id=:a'), {
+    'a': id
+  })
+
+  db.session.commit()
+
+  return render_template('info.html',
+    title='Esine poistettu',
+    clarification='''
+      Esine ei enää näy korttelilainaamon esinelistauksessa.
+      <br><br>&gt;&gt; <a href="/welcome">Tästä pääset etusivulle</a>
+    '''
+  )
+
 @app.post('/details')
 @auth
 @csrfPost

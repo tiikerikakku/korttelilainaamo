@@ -22,41 +22,46 @@
 {% block stuff %}
 
 <section>
-  {% if item[4] != session['user'] %}
-    <h2>{{item[1]}}</h2>
-    <p>Kuvaus: {{item[2]}}</p>
-    {% if item[3] %}
-      <p>Lisää tietoa: <a href="{{item[3]}}" target="_blank">{{item[3]}}</a></p>
-    {% endif %}
-    <p>Lainaajan maine: {{rating}}</p>
-  {% else %}
-    <h2>Muokkaa esinettäsi</h2>
-    <form action="/details" method="post">
-      <input type="text" name="name" placeholder="Esineen nimi" required value="{{item[1]}}">
-      <textarea name="description" rows="2" placeholder="Esineen kuvaus tänne." required>{{item[2]}}</textarea>
-      <input type="url" name="link" placeholder="Lisätietolinkki (valinnainen)" value="{{item[3]|replace(None, '')}}">
-      <input type="hidden" name="id" value="{{item[0]}}">
-      <input type="hidden" name="csrf" value="{{session['csrf']}}">
-      <input type="submit" value="Muokkaa esinettä 🥐">
-    </form>
-  {% endif %}
-  <img src="https://tiikerikakku.github.io/rojusailio/beautiful_divider.svg" alt="sisällönjakaja">
-  <h3>
-    &gt;&gt;
+  {% if item[6] == False %}
     {% if item[4] != session['user'] %}
-      {% if item[5] == None %}
-        <a href="/lend/{{item[0]}}?csrf={{session['csrf']}}">Haluan lainata tämän!</a>
-      {% else %}
-        Tuote on sinulla lainassa.
+      <h2>{{item[1]}}</h2>
+      <p>Kuvaus: {{item[2]}}</p>
+      {% if item[3] %}
+        <p>Lisää tietoa: <a href="{{item[3]}}" target="_blank">{{item[3]}}</a></p>
       {% endif %}
+      <p>Lainaajan maine: {{rating}}</p>
     {% else %}
-      {% if item[5] == None %}
-        <a href="#">Poista tuote</a>
-      {% else %}
-        <a href="/return/{{item[0]}}?csrf={{session['csrf']}}">Merkitse laina palautetuksi</a>
-      {% endif %}
+      <h2>Muokkaa esinettäsi</h2>
+      <form action="/details" method="post">
+        <input type="text" name="name" placeholder="Esineen nimi" required value="{{item[1]}}">
+        <textarea name="description" rows="2" placeholder="Esineen kuvaus tänne." required>{{item[2]}}</textarea>
+        <input type="url" name="link" placeholder="Lisätietolinkki (valinnainen)" value="{{item[3]|replace(None, '')}}">
+        <input type="hidden" name="id" value="{{item[0]}}">
+        <input type="hidden" name="csrf" value="{{session['csrf']}}">
+        <input type="submit" value="Muokkaa esinettä 🥐">
+      </form>
     {% endif %}
-  </h3>
+    <img src="https://tiikerikakku.github.io/rojusailio/beautiful_divider.svg" alt="sisällönjakaja">
+    <h3>
+      &gt;&gt;
+      {% if item[4] != session['user'] %}
+        {% if item[5] == None %}
+          <a href="/lend/{{item[0]}}?csrf={{session['csrf']}}">Haluan lainata tämän!</a>
+        {% else %}
+          Tuote on sinulla lainassa.
+        {% endif %}
+      {% else %}
+        {% if item[5] == None %}
+          <a href="/remove/{{item[0]}}?csrf={{session['csrf']}}">Poista tuote</a>
+        {% else %}
+          <a href="/return/{{item[0]}}?csrf={{session['csrf']}}">Merkitse laina palautetuksi</a>
+        {% endif %}
+      {% endif %}
+    </h3>
+  {% else %}
+    <h2>Tuote on poistettu.</h2>
+    &gt;&gt; <a href="/welcome">Tästä kotiin</a>
+  {% endif %}
 </section>
 
 {% endblock %}

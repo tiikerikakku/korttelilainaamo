@@ -23,12 +23,12 @@ def welcome():
   itemsFromUser = request.args.get('owner', type=int)
 
   if not itemsFromUser:
-    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null and items.owner!=:b'), {
+    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.possessor is null and items.owner!=:b and items.removed is false'), {
       'a': area,
       'b': session['user']
     }).fetchall()
   else:
-    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.owner=:b'), {
+    items = db.session.execute(text('select items.* from items, users where items.owner = users.id and users.area=:a and items.owner=:b and items.removed is false'), {
       'a': area,
       'b': itemsFromUser
     }).fetchall()
