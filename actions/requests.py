@@ -6,10 +6,6 @@ from sqlalchemy.sql import text
 @app.get('/requests/<int:id>')
 @auth
 def getRequest(id):
-  # todo check input
-  # todo maybe check if item is available
-  # todo check if user is allowed to see this
-
   req = db.session.execute(text('select item, creator, status from requests where id=:a'), {
     'a': id
   }).fetchone()
@@ -39,10 +35,6 @@ def getRequest(id):
 @auth
 @csrfGet
 def acceptRequest(id):
-  # todo check input
-  # todo check if user is allowed to do this
-  # todo do not allow accepting if item is already given to someone
-
   req = db.session.execute(text('select items.owner, requests.status, items.possessor from items, requests where items.id = requests.item and requests.id=:a'), {
     'a': id
   }).fetchone()
@@ -83,9 +75,6 @@ def acceptRequest(id):
 @auth
 @csrfGet
 def declineRequest(id):
-  # todo check input
-  # todo check if user is allowed to do this
-
   req = db.session.execute(text('select items.owner, requests.status from items, requests where items.id = requests.item and requests.id=:a'), {
     'a': id
   }).fetchone()

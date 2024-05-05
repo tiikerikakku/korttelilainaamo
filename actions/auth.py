@@ -36,9 +36,6 @@ def signOut():
 
 @app.post('/register')
 def register():
-  # todo check if user exists
-  # todo check field inputs
-
   if request.form['secret'] == '':
     return render_template('info.html', 
       clarification='Tiliä ei voitu luoda. Salasana liian lyhyt.'

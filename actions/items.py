@@ -8,9 +8,6 @@ from sqlalchemy.exc import IntegrityError
 @auth
 @csrfPost
 def createItem():
-  # todo check field inputs
-  # todo accept link input
-
   try:
     db.session.execute(text('insert into items (name, description, owner, link) values (:a, :b, :c, :d)'), {
       'a': request.form['name'],
@@ -36,9 +33,6 @@ def createItem():
 @app.get('/item/<int:id>')
 @auth
 def getItem(id):
-  # todo check input
-  # todo maybe check if item is available
-
   item = db.session.execute(text('select * from items where id=:a'), {
     'a': id
   }).fetchone()
@@ -53,9 +47,6 @@ def getItem(id):
 @auth
 @csrfGet
 def lendItem(id):
-  # todo check input
-  # todo maybe check if item is available
-
   rid = db.session.execute(text('insert into requests (item, creator) values (:a, :b) returning id') , {
     'a': id,
     'b': session['user']
@@ -69,9 +60,6 @@ def lendItem(id):
 @auth
 @csrfGet
 def returnItem(id):
-  # todo check input
-  # todo ensure that user is allowed to do this
-
   db.session.execute(text('update items set possessor = null where id=:a and owner=:b'), {
     'a': id,
     'b': session['user']
@@ -91,8 +79,6 @@ def returnItem(id):
 @auth
 @csrfGet
 def removeItem(id):
-  # todo ensure allowed
-
   db.session.execute(text('update items set removed = true where id=:a and owner=:b'), {
     'a': id,
     'b': session['user']
@@ -112,8 +98,6 @@ def removeItem(id):
 @auth
 @csrfPost
 def updateItem():
-  # todo ensure that user is allowed to do this
-
   try:
     db.session.execute(text('update items set name=:a, description=:b, link=:c where id=:d and owner=:e'), {
       'a': request.form['name'],

@@ -3,8 +3,6 @@ from checks import auth
 from flask import render_template, request, session, redirect
 from sqlalchemy.sql import text
 
-# todo csrf
-
 @app.get('/')
 def main():
   if 'user' in session and session['user'] != '':
@@ -17,8 +15,6 @@ def welcome():
   area = db.session.execute(text('select area from users where id=:a'), {
     'a': session['user']
   }).fetchone()[0]
-
-  # todo check removed items (or just actually remove them from the db?)
 
   itemsFromUser = request.args.get('owner', type=int)
 
