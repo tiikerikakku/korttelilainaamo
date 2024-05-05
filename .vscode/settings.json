@@ -1,8 +1,10 @@
 {
-  "editor.tabSize": 4,
-  "editor.detectIndentation": false,
   "autopep8.args": [
     "--select",
     "E101"
-  ]
+  ],
+  "[python]": {
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false
+  }
 }
