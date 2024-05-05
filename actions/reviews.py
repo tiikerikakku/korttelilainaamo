@@ -9,9 +9,14 @@ def review(id):
   # todo check input
   # todo check that task is available and user is correct
 
-  review = db.session.execute(text('select users.nick from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
+  review = db.session.execute(text('select users.nick, reviews.reviewer from reviews, users where reviews.id=:a and reviews.reviewed = users.id'), {
     'a': id
   }).fetchone()
+
+  if review[1] != session['user']:
+    return render_template('info.html',
+      clarification='Et voi antaa arvioita muiden puolesta...'
+    )
 
   return render_template('review.html', review=review, id=id)
 
@@ -29,9 +34,10 @@ def sendReview():
   if request.form['review'] == 'bad':
     rating = -1
 
-  db.session.execute(text('update reviews set review=:a, given = now() where id=:b'), {
+  db.session.execute(text('update reviews set review=:a, given = now() where id=:b and reviewer=:c'), {
     'a': rating,
-    'b': request.form['id']
+    'b': request.form['id'],
+    'c': session['user']
   })
 
   db.session.commit()

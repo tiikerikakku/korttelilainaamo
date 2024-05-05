@@ -18,6 +18,9 @@ def getRequest(id):
     'a': req[0]
   }).fetchone()
 
+  if (req[1] != session['user'] and item[1] != session['user']) or req[2] != 'pending':
+    return render_template('info.html', clarification='EI OIKEUTTA TÄNNE!!!!')
+
   isOwner = (item[1] == session['user'])
 
   if isOwner:
@@ -39,6 +42,15 @@ def acceptRequest(id):
   # todo check input
   # todo check if user is allowed to do this
   # todo do not allow accepting if item is already given to someone
+
+  req = db.session.execute(text('select items.owner, requests.status, items.possessor from items, requests where items.id = requests.item and requests.id=:a'), {
+    'a': id
+  }).fetchone()
+
+  if req[0] != session['user'] or req[1] != 'pending' or req[2] != None:
+    return render_template('info.html',
+      clarification='Tämä toimenpide ei ole sallittu.'
+    )
 
   db.session.execute(text('update requests set status = \'accepted\' where id=:a'), {
     'a': id
@@ -73,6 +85,15 @@ def acceptRequest(id):
 def declineRequest(id):
   # todo check input
   # todo check if user is allowed to do this
+
+  req = db.session.execute(text('select items.owner, requests.status from items, requests where items.id = requests.item and requests.id=:a'), {
+    'a': id
+  }).fetchone()
+
+  if req[0] != session['user'] or req[1] != 'pending':
+    return render_template('info.html',
+      clarification='Tämä toimenpide ei ole sallittu.'
+    )
 
   db.session.execute(text('update requests set status = \'declined\' where id=:a'), {
     'a': id
