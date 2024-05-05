@@ -16,6 +16,19 @@ def welcome():
     'a': session['user']
   }).fetchone()[0]
 
+  business = None
+
+  if str(area)[-1] == '9':
+    business = 'Tuntematon yrityskortteli'
+    bid = int(str(area)[:-1])
+
+    businessInfo = db.session.execute(text('select name from companies where id=:a'), {
+      'a': bid
+    }).fetchone()
+
+    if businessInfo:
+      business = businessInfo[0]
+
   itemsFromUser = request.args.get('owner', type=int)
 
   if not itemsFromUser:
@@ -45,7 +58,7 @@ def welcome():
     'a': session['user']
   }).fetchall()
 
-  return render_template('welcome.html', items=items, area=f'{area:05}', req=req, reviews=reviews, given=given, having=having)
+  return render_template('welcome.html', items=items, area=f'{area:05}', business=business, req=req, reviews=reviews, given=given, having=having)
 
 import actions.auth
 import actions.items
